@@ -29,14 +29,17 @@ const AuthenticationPage = ({ mode, role }) => {
     const [shopNameError, setShopNameError] = useState(false);
 
     const handleSubmit = (event) => {
-
+        event.preventDefault()
         let email, password;
+        email = event.target.email.value;
+        password = event.target.password.value
 
         if (!password) {
             if (!email) setEmailError(true);
             if (!password) setPasswordError(true);
             return;
         }
+        setLoader(true)
 
          if (mode === "Register") {
             const name = event.target.userName.value;
@@ -55,6 +58,7 @@ const AuthenticationPage = ({ mode, role }) => {
                 }
 
                 const sellerFields = { name, email, password, role, shopName }
+
                 dispatch(authUser(sellerFields, role, mode))
             }
             else {
@@ -72,6 +76,7 @@ const AuthenticationPage = ({ mode, role }) => {
 
     const handleInputChange = (event) => {
         const { name } = event.target;
+
         if (name === 'email') setEmailError(false);
         if (name === 'password') setPasswordError(false);
         if (name === 'userName') setUserNameError(false);

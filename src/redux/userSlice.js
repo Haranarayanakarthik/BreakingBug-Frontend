@@ -173,6 +173,7 @@ const userSlice = createSlice({
             const decodedToken = jwtDecode(state.currentToken);
             if (state.currentToken) {              state.isLoggedIn = true;
             } else {
+                console.log("removing user. invalid token")
                 localStorage.removeItem('user');
                 state.currentUser = null;
                 state.currentRole = null;
