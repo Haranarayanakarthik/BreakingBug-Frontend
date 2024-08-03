@@ -1,4 +1,6 @@
 export const timeAgo = (date) => {
+    //date is string, should change to DATE() object
+    const DATE = new Date(date)
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     
     const today = new Date();
@@ -13,7 +15,7 @@ export const timeAgo = (date) => {
         const hours = Math.floor(timeDifference / 3600000);
         return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
     } else {
-        return `on ${date.toLocaleDateString(undefined, options)}`;
+        return `on ${DATE.toLocaleDateString(undefined, options)}`;
     }
 };
 
