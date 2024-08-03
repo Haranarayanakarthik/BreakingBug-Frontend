@@ -30,11 +30,11 @@ const App = () => {
     if (currentToken) {
         dispatch(isTokenValid());
     } else {
-        console.log('No token found');
+        console.log('No token found');//TOKEN CHECK
     };
-    (async () => {
-      dispatch(getProducts())
-    })();
+    // (async () => {
+    //   dispatch(getProducts())
+    // })();
     
 }, [dispatch, currentToken]);
 

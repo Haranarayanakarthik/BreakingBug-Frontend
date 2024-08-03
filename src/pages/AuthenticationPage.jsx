@@ -63,7 +63,7 @@ const AuthenticationPage = ({ mode, role }) => {
             }
             else {
                 const customerFields = { name, email, password, role }
-
+                
                 dispatch(authUser(customerFields, role, mode))
             }
         }
