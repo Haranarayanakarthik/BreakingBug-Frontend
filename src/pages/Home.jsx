@@ -20,6 +20,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getProducts());
+
   }, [dispatch]);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const Home = () => {
       return () => clearTimeout(timeoutId);
     }
   }, [error]);
-
+  console.log("products:",productData)
   return (
     <div id="top">
       <Container
