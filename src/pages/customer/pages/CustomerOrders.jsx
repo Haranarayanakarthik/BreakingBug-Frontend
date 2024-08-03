@@ -15,9 +15,9 @@ import { getSpecificProducts } from '../../../redux/userHandle';
 
 const CustomerOrders = () => {
 
-    const dispatch = useDispatch()
-
-    const { currentUser, loading, responseSpecificProducts } = useSelector(state => state.user);
+    const dispatch = useDispatch();
+    const { currentUser, loading } = useSelector(state => state.user);
+    const productData = currentUser?.productData || []; // Adjust according to your actual state structure
 
     useEffect(() => {
         dispatch(getSpecificProducts("getOrderedProductsByCustomer"));
@@ -47,15 +47,11 @@ const CustomerOrders = () => {
     return (
         <>
             {loading ?
-                <h1>
-                    Loading...
-                </h1>
+                <h1>Loading...</h1>
                 :
                 <>
-                    {responseSpecificProducts ?
-                        <h1>
-                            No Orders Till Now
-                        </h1>
+                    {productData.length === 0 ?
+                        <h1>No Orders Till Now</h1>
                         :
                         <Container>
                             <Typography sx={{ fontSize: 40, textAlign: "center" }}>
@@ -111,13 +107,12 @@ const CustomerOrders = () => {
                             </Stack>
 
                             <Grid container spacing={3}>
-                                {specificProductData && specificProductData.map((product, index) => (
+                                {productData.map((product, index) => (
                                     <Grid key={index} xs={12} sm={6} md={3}>
                                         <ProductCard product={product} />
                                     </Grid>
                                 ))}
                             </Grid>
-
                         </Container>
                     }
                 </>
@@ -126,4 +121,4 @@ const CustomerOrders = () => {
     );
 }
 
-export default CustomerOrders
+export default CustomerOrders;

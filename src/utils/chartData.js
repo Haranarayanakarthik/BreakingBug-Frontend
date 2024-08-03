@@ -1,4 +1,6 @@
-export const ChartDatabyYear = {
+export const 
+ChartDatabyYear = {
+    type:'line',
     options: {
         xaxis: {
             categories: ["2018", "2019", "2020", "2021", "2022", "2023"],

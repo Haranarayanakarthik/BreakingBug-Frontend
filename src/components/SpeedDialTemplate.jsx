@@ -11,7 +11,7 @@ const SpeedDialTemplate = ({ actions }) => {
             direction="left"
         >
             {actions.map((action) => (
-                <SpeedDialAction
+                <SpeedDial
                     key={action.name}
                     icon={action.icon}
                     tooltipTitle={action.name}
