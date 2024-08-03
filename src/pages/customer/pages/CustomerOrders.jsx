@@ -18,7 +18,7 @@ const CustomerOrders = () => {
     const dispatch = useDispatch();
     const { currentUser, loading } = useSelector(state => state.user);
     const productData = currentUser?.productData || []; // Adjust according to your actual state structure
-
+    //check here.
     useEffect(() => {
         dispatch(getSpecificProducts("getOrderedProductsByCustomer"));
     }, [dispatch]);
