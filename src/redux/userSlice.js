@@ -28,22 +28,13 @@ const initialState = {
     customersList: [],
 };
 
-const updateCartDetailsInLocalStorage = (cartDetails) => {
+const updateLocalStorage = (key, value) => {
     const currentUser = JSON.parse(localStorage.getItem('user')) || {};
-    currentUser.cartDetails = cartDetails;
+    currentUser[key] = value;
     localStorage.setItem('user', JSON.stringify(currentUser));
 };
 
-export const updateShippingDataInLocalStorage = (shippingData) => {
-    const currentUser = JSON.parse(localStorage.getItem('user')) || {};
-    const updatedUser = {
-        ...currentUser,
-        shippingData: shippingData
-    };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-};
-
-const userSlice = createSlice({
+export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
@@ -71,10 +62,10 @@ const userSlice = createSlice({
         },
         updateCurrentUser: (state, action) => {
             state.currentUser = action.payload;
-            localStorage.setItem('user', JSON.stringify(action.payload));
+            updateLocalStorage('user', action.payload);
         },
         authSuccess: (state, action) => {
-            localStorage.setItem('user', JSON.stringify(action.payload));
+            updateLocalStorage('user', action.payload);
             state.currentUser = action.payload;
             state.currentRole = action.payload.role;
             state.currentToken = action.payload.token;
@@ -95,7 +86,7 @@ const userSlice = createSlice({
                 state.currentUser.cartDetails.push(newCartItem);
             }
 
-            updateCartDetailsInLocalStorage(state.currentUser.cartDetails);
+            updateLocalStorage('cartDetails', state.currentUser.cartDetails);
         },
         removeFromCart: (state, action) => {
             const existingProduct = state.currentUser.cartDetails.find(
@@ -115,36 +106,27 @@ const userSlice = createSlice({
                 }
             }
 
-            updateCartDetailsInLocalStorage(state.currentUser.cartDetails);
+            updateLocalStorage('cartDetails', state.currentUser.cartDetails);
         },
 
         removeSpecificProduct: (state, action) => {
-            const productIdToRemove = action.payload;
             state.currentUser.cartDetails = state.currentUser.cartDetails.filter(
-              (cartItem) => cartItem._id !== productIdToRemove
-
+                (cartItem) => cartItem._id !== action.payload
             );
-
-            
-          },
-        
+            updateLocalStorage('cartDetails', state.currentUser.cartDetails);
+        },
 
         fetchProductDetailsFromCart: (state, action) => {
-            const productIdToFetch = action.payload;
             const productInCart = state.currentUser.cartDetails.find(
-                (cartItem) => cartItem._id === productIdToFetch
+                (cartItem) => cartItem._id === action.payload
             );
 
-            if (productInCart) {
-                state.productDetailsCart = { ...productInCart };
-            } else {
-                state.productDetailsCart = null;
-            }
+            state.productDetailsCart = productInCart || null;
         },
 
         removeAllFromCart: (state) => {
             state.currentUser.cartDetails = [];
-            updateCartDetailsInLocalStorage([]);
+            updateLocalStorage('cartDetails', []);
         },
 
         authFailed: (state, action) => {
@@ -170,17 +152,22 @@ const userSlice = createSlice({
         },
 
         isTokenValid: (state) => {
-            const decodedToken = jwtDecode(state.currentToken);
-            if (state.currentToken) {              state.isLoggedIn = true;
+            if (state.currentToken) {
+                try {
+                    jwtDecode(state.currentToken);
+                    state.isLoggedIn = true;
+                } catch (e) {
+                    console.log("Invalid token. Logging out.");
+                    localStorage.removeItem('user');
+                    state.currentUser = null;
+                    state.currentRole = null;
+                    state.currentToken = null;
+                    state.status = 'idle';
+                    state.response = null;
+                    state.error = null;
+                    state.isLoggedIn = false;
+                }
             } else {
-                console.log("removing user. invalid token")
-                localStorage.removeItem('user');
-                state.currentUser = null;
-                state.currentRole = null;
-                state.currentToken = null;
-                state.status = 'idle';
-                state.response = null;
-                state.error = null;
                 state.isLoggedIn = false;
             }
         },
@@ -291,7 +278,6 @@ export const {
     authError,
     authLogout,
     isTokenValid,
-    doneSuccess,
     getDeleteSuccess,
     setFilteredProducts,
     getRequest,
@@ -314,7 +300,6 @@ export const {
     removeAllFromCart,
     fetchProductDetailsFromCart,
     updateCurrentUser,
-    
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

@@ -7,21 +7,30 @@ import TableTemplate from "../../../components/TableTemplate";
 import { useNavigate } from "react-router-dom";
 
 const AddedToCartSection = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const { currentUser, specificProductData, responseSpecificProducts } = useSelector(state => state.user);
 
     useEffect(() => {
-        dispatch(getSpecificProducts(currentUser._id, "getAddedToCartProducts"));
-    }, [dispatch, currentUser._id])
+        if (currentUser && currentUser._id) {
+            dispatch(getSpecificProducts(currentUser._id, "getAddedToCartProducts"));
+        } else {
+            console.error("Current user or user ID is missing.");
+        }
+    }, [dispatch, currentUser]);
+
+    // Log values for debugging
+    console.log('currentUser:', currentUser);
+    console.log('specificProductData:', specificProductData);
+    console.log('responseSpecificProducts:', responseSpecificProducts);
 
     const productsColumns = [
         { id: 'name', label: 'Product Name', minWidth: 170 },
         { id: 'quantity', label: 'Product Quantity', minWidth: 100 },
         { id: 'category', label: 'Product Category', minWidth: 100 },
         { id: 'subcategory', label: 'Product SubCategory', minWidth: 100 },
-    ]
+    ];
 
     const productsRows = Array.isArray(specificProductData) && specificProductData.length > 0
         ? specificProductData.map((product) => ({
@@ -39,25 +48,25 @@ const AddedToCartSection = () => {
             <>
                 <BlueButton
                     onClick={() => {
-                        navigate("/Seller/orders/product/" + row.productID)
+                        navigate("/Seller/orders/product/" + row.productID);
                     }}
                 >
                     View Product
-                </BlueButton >
+                </BlueButton>
                 <GreenButton
                     onClick={() => {
-                        navigate("/Seller/orders/customers/" + row.productID)
+                        navigate("/Seller/orders/customers/" + row.productID);
                     }}
                 >
                     Show Customers
-                </GreenButton >
+                </GreenButton>
             </>
         );
     };
 
     return (
         <>
-            {responseSpecificProducts ?
+            {responseSpecificProducts ? (
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                     <GreenButton
                         variant="contained"
@@ -66,17 +75,16 @@ const AddedToCartSection = () => {
                         Add Products
                     </GreenButton>
                 </Box>
-                :
+            ) : (
                 <>
                     <Typography variant="h5" gutterBottom>
                         Products List:
                     </Typography>
-
                     <TableTemplate buttonHaver={ProductsButtonHaver} columns={productsColumns} rows={productsRows} />
                 </>
-            }
+            )}
         </>
-    )
-}
+    );
+};
 
-export default AddedToCartSection
+export default AddedToCartSection;

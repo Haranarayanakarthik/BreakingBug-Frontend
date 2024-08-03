@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableRow, styled, tableCellClasses } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, styled, tableCellClasses } from '@mui/material';
 
 const TableTemplate = ({ columns, rows }) => {
   const [page, setPage] = useState(0);
@@ -9,20 +9,22 @@ const TableTemplate = ({ columns, rows }) => {
     <>
       <TableContainer>
         <Table aria-label="sticky table">
-          <StyledTableRow>
-            {columns.map((column) => (
-              <StyledTableCell
-                key={column.id}
-                align={column.align}
-                style={{ minWidth: column.minWidth }}
-              >
-                {column.label}
+          <TableHead>
+            <StyledTableRow>
+              {columns.map((column) => (
+                <StyledTableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                >
+                  {column.label}
+                </StyledTableCell>
+              ))}
+              <StyledTableCell align="center">
+                Actions
               </StyledTableCell>
-            ))}
-            <StyledTableCell align="center">
-              Actions
-            </StyledTableCell>
-          </StyledTableRow>
+            </StyledTableRow>
+          </TableHead>
           <TableBody>
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

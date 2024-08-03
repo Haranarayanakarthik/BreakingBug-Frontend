@@ -8,9 +8,7 @@ import altImage from "../../../assets/altimg.png";
 import styled from 'styled-components';
 
 const AddProduct = () => {
-
   const dispatch = useDispatch();
-
   const { currentUser, status, response, error } = useSelector(state => state.user);
 
   const [productName, setProductName] = useState("");
@@ -22,7 +20,7 @@ const AddProduct = () => {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [tagline, setTagline] = useState("");
-  const seller = currentUser._id
+  const seller = currentUser._id;
 
   const [loader, setLoader] = useState(false);
   const [message, setMessage] = useState("");
@@ -31,9 +29,9 @@ const AddProduct = () => {
   const fields = {
     productName,
     price: {
-      mrp: mrp,
-      cost: cost,
-      discountPercent: discountPercent,
+      mrp,
+      cost,
+      discountPercent,
     },
     subcategory,
     productImage,
@@ -45,7 +43,8 @@ const AddProduct = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log(fields);
+    setLoader(true);
+    dispatch(addStuff('ProductCreate', fields)); // Ensure 'product-address' is correct
   };
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const AddProduct = () => {
       setShowPopup(true);
       setMessage("Done Successfully");
     } else if (status === 'failed') {
-      setMessage(response);
+      setMessage(response || "An error occurred");
       setShowPopup(true);
       setLoader(false);
     } else if (status === 'error') {
@@ -86,8 +85,8 @@ const AddProduct = () => {
             <Stack spacing={1} sx={{ mb: 3 }}>
               {
                 productImage
-                  ? <ProductImage src={productImage} alt="" />
-                  : <ProductImage src={altImage} alt="" />
+                  ? <ProductImage src={productImage} alt="Product" />
+                  : <ProductImage src={altImage} alt="Default" />
               }
             </Stack>
             <form onSubmit={submitHandler}>

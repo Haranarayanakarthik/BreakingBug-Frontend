@@ -24,7 +24,9 @@ const ShowProducts = () => {
   const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
-    dispatch(getProductsbySeller(currentUser._id));
+    dispatch(getProductsbySeller(currentUser._id)).then(response =>{
+      console.log(response)
+    });
   }, [dispatch, currentUser._id])
 
   const deleteHandler = (deleteID, address) => {

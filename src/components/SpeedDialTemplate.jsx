@@ -1,5 +1,5 @@
 import React from 'react'
-import { SpeedDial, styled } from '@mui/material';
+import { SpeedDial,SpeedDialAction, styled } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
 
 const SpeedDialTemplate = ({ actions }) => {
@@ -11,7 +11,7 @@ const SpeedDialTemplate = ({ actions }) => {
             direction="left"
         >
             {actions.map((action) => (
-                <SpeedDial
+                <SpeedDialAction
                     key={action.name}
                     icon={action.icon}
                     tooltipTitle={action.name}
