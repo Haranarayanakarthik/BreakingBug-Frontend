@@ -32,9 +32,7 @@ const App = () => {
     } else {
         console.log('No token found');//TOKEN CHECK
     };
-    // (async () => {
-    //   dispatch(getProducts())
-    // })();
+    dispatch(getProducts())
     
 }, [dispatch, currentToken]);
 
