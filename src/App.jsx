@@ -21,14 +21,23 @@ const App = () => {
 
   const dispatch = useDispatch()
 
-  const { isLoggedIn, currentToken, currentRole, productData } = useSelector(state => state.user);
+  const { isLoggedIn, currentToken, currentRole, productData } = useSelector(state =>{ 
+    console.log("state:",state.user)
+   return  state.user
+  });
+  
+  useEffect(() => {
+    if (currentToken) {
+        dispatch(isTokenValid());
+    } else {
+        console.log('No token found');
+    };
+    (async () => {
+      dispatch(getProducts())
+    })();
+    
+}, [dispatch, currentToken]);
 
-  useEffect(() =>
-     {
-
-
-    dispatch(isTokenValid());
-  }, [dispatch]); 
 
   return (
     <BrowserRouter>
