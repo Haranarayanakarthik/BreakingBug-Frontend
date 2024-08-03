@@ -40,7 +40,6 @@ const Navbar = () => {
 
     React.useEffect(() => {
         if (currentRole === "Customer") {
-            console.log(currentUser);
             dispatch(updateCustomer(currentUser, currentUser._id));
         }
     }, [currentRole, currentUser, dispatch, anchorElNav])
@@ -53,11 +52,11 @@ const Navbar = () => {
 
     // Cart
     const handleCloseCart = () => {
-        setIsCartOpen(true);
+        setIsCartOpen(false);
     };
 
     const handleOpenCart = () => {
-        setIsCartOpen(false);
+        setIsCartOpen(true);
     };
 
     // Navigation Menu
